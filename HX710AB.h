@@ -60,13 +60,13 @@ public:
     //  pulses for next read
     //  25 = Differential Input, 10 Hz
     //  26 = Temperature, 40 Hz
-    digitalWrite(SCK, HIGH);
-    digitalWrite(SCK, LOW);
+    digitalWrite(_clock, HIGH);
+    digitalWrite(_clock, LOW);
     if (differential == false)
     {
       //  Temperature out, 40 Hz
-      digitalWrite(SCK, HIGH);
-      digitalWrite(SCK, LOW);
+      digitalWrite(_clock, HIGH);
+      digitalWrite(_clock, LOW);
     }
 
     //  extend sign if needed
