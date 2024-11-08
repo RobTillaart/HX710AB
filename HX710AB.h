@@ -142,14 +142,14 @@ public:
     //  pulses for next read
     //  26 = DVDD-AVDD (HX710B), 40 Hz
     //  27 = Differential Input, 40 Hz
-    digitalWrite(SCK, HIGH);
-    digitalWrite(SCK, LOW);
-    digitalWrite(SCK, HIGH);
-    digitalWrite(SCK, LOW);
+    digitalWrite(_clock, HIGH);
+    digitalWrite(_clock, LOW);
+    digitalWrite(_clock, HIGH);
+    digitalWrite(_clock, LOW);
     if (differential)
     {
-      digitalWrite(SCK, HIGH);
-      digitalWrite(SCK, LOW);
+      digitalWrite(_clock, HIGH);
+      digitalWrite(_clock, LOW);
     }
 
     //  extend sign if needed
