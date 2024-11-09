@@ -87,6 +87,12 @@ public:
   };
 
 
+  void powerUp()
+  {
+    digitalWrite(_clock, LOW);
+  };
+
+
 protected:
   uint8_t _data;
   uint8_t _clock;
@@ -169,6 +175,12 @@ public:
     digitalWrite(_clock, HIGH);
   };
 
+
+  void powerUp()
+  {
+    digitalWrite(_clock, LOW);
+  };
+  
 
 protected:
   uint8_t _data;

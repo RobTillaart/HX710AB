@@ -24,18 +24,22 @@ This library provides two classes to read the HX710A and the HX710B ADC.
 
 _The HX710(A/B) is a precision 24-bit analog-to-digital converter (ADC) with built-in
 temperature sensor (HX710A) or DVDD, AVDD voltage difference detection (HX710B). 
-It’s designed for weigh scales and industrial control applications to interface 
+Itâ€™s designed for weigh scales and industrial control applications to interface 
 directly with a bridge sensor._
 
 The HX710A can read the internal temperature.
 
 THe HX710B can read the DVDD and AVDD supply voltage difference.
 
-(To elaborate)
+The HX710 has no means to detect errors, however several readings without noise
+especially zero's might be an indication that something is wrong.
+
+
+### Performance
 
 Performance depends on platform used and on the time to make a measurment.
-The latter is either 10 or 40 Hz, which means optional 100 or 25 milliseconds
-extra waiting time.
+The latter is either 10 or 40 Hz, which possibly means optional 100 or 25 
+milliseconds extra waiting time. (needs investigations)
 
 
 ### Related
@@ -45,9 +49,10 @@ extra waiting time.
 - https://github.com/RobTillaart/HX711_MP  for load celss with multipoint calibration.
 - https://swharden.com/blog/2022-11-14-hx710b-arduino/  usage with pressure sensor.
 - https://http://www.aviaic.com/  (manufacturer)
+- https://github.com/RobTillaart/weight  conversions
 
 
-### Tested
+### Test
 
 TODO: Test with hardware.
 
@@ -67,22 +72,24 @@ TODO: Test with hardware.
 
 ### Read
 
-Note the read can block for more than 100 / 25 millis.
-
 - **int32_t read(bool differential = true)** powers up the device,
-reads from the device, sets the mode for the next read.
+reads from the device, sets the mode for the **next** read.
+The default parameter is true as differential readings are most used.
 See table below. 
+- **int32_t lastRead()** returns last read value, note this can be
+differential or other. The user should track this.
 
 
-|  differential  |  HX710A         |  HX710A         |
-|:--------------:|:---------------:|:---------------:|
-|   true         |  differential   |  differential   |
+|  differential  |  HX710A         |  HX710B         |  notes    |
+|:--------------:|:---------------:|:---------------:|:---------:|
+|   true         |  differential   |  differential   |  default  |
 |   false        |  temperature    |  DVDD and AVDD  |
 
 
 ### Power
 
 - **void powerDown()** puts the device in sleep mode (after 60 us).
+- **void powerUp()** wakes up device.
 
 Note the **read()** function automatically wakes up the device.
 
@@ -92,21 +99,20 @@ Note the **read()** function automatically wakes up the device.
 #### Must
 
 - get hardware to test  (at least HX710B pressure)
+- investigate blocking time read()
 - improve documentation
 
 #### Should
 
 - refactor class hierarchy
 - converting to units / temperature  (See HX711)
+- async interface to circumvent the blocking wait.
+  - bool request();    //  wakes up device
+  - bool dataReady();  //  dataline check
+  - int32_t fetch(differential = true);  //  actual fetch
 
 #### Could
 
-- async interface to circumvent the blocking wait.
-  - bool request();
-  - bool dataReady();
-  - int32_t fetch(differential = true);
-- bool isPowerUp();  //  needed?
-- int32_t lastValue();  //  cache
 - calibration somehow.
   - zero reading?  tare()? 
 - extend unit tests(?)
@@ -116,6 +122,8 @@ Note the **read()** function automatically wakes up the device.
 
 #### Wont
 
+- bool isPowerUp();  //  needed?
+- void powerUp() not needed, as read does this.
 
 ## Support
 

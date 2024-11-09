@@ -7,9 +7,12 @@ HX710B	KEYWORD1
 
 # Methods and Functions (KEYWORD2)
 begin	KEYWORD2
+
 read	KEYWORD2
+lastRead	KEYWORD2
 
 powerDown	KEYWORD2
+powerUp	KEYWORD2
 
 
 # Constants (LITERAL1)

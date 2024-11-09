@@ -1,6 +1,6 @@
 {
   "name": "HX710AB",
-  "keywords": "",
+  "keywords": "scale, load, cell, bridge",
   "description": "Arduino library for the HX710A and HX710B 24-Bit ADC.",
   "authors":
   [
