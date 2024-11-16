@@ -25,7 +25,8 @@ void setup()
 
   HX.begin();
 
-  HX.measureOffset();
+  //  adjust to your raw measurements.
+  HX.calibrateUnit(50, 0, 100, 80);
 }
 
 
