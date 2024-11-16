@@ -39,8 +39,15 @@ unittest_teardown()
 }
 
 
+unittest(test_0)
+{
+  assertEqual(1,1);
+}
+
+
 unittest(test_constructor)
 {
+  HX710AB hx(4, 5);
   HX710A hxa(6, 7);
   HX710B hxb(8, 9);
 
