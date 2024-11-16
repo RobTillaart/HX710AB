@@ -18,11 +18,9 @@ lastValueRead	KEYWORD2
 
 readUnit	KEYWORD2
 
-measureOffset	KEYWORD2
+calibrateUnit	KEYWORD2
 setOffset	KEYWORD2
 getOffset	KEYWORD2
-
-measureScale	KEYWORD2
 setScale	KEYWORD2
 getScale	KEYWORD2
 

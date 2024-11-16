@@ -42,7 +42,10 @@ These are not 1-to-1 replaceable devices.
 
 Performance depends on platform used and on the time to make a measurement.
 The latter is either 10 or 40 Hz, which possibly means optional 100 or 25
-milliseconds extra waiting time. (needs investigations)
+milliseconds extra waiting time.
+
+To minimize the blocking time the library implemented (0.1.2) an asynchronous 
+interface to keep performance at maximum level.
 
 
 ### Related
@@ -53,6 +56,7 @@ milliseconds extra waiting time. (needs investigations)
 - https://swharden.com/blog/2022-11-14-hx710b-arduino/  usage with pressure sensor.
 - https://http://www.aviaic.com/  (manufacturer)
 - https://github.com/RobTillaart/weight  conversions
+- https://github.com/RobTillaart/pressure  conversions
 
 
 ### Test
@@ -61,7 +65,6 @@ Tested HX710B with Arduino UNO.
 - raw readings work
 - pressure sensor drifts.
 - two sensors tested have very different "zero point"
-- TODO investigate is calibration, mapping on actual pressure (HOW).
 
 
 ## Interface
@@ -81,6 +84,7 @@ The fastProcessor option adds a 1 uS delay for each clock half-cycle
 to keep the time greater than 200 nS. 
 If data does not makes sense, not stable one can try this flag.
 
+
 ### Read, synchronous
 
 - **int32_t read(bool differential = true)** powers up the device,
@@ -96,6 +100,7 @@ differential or other. The user should keep track of this.
 |   true         |  differential   |  differential   |  default  |
 |   false        |  temperature    |  DVDD and AVDD  |
 
+
 ### Read, asynchronous
 
 As the device might be blocking for up to 100 millis when using the synchronous
@@ -110,9 +115,46 @@ reads from the device, sets the mode for the **next** read.
 The default parameter is true as differential readings are most used.
 See table above.
 
+
 ### Calibration
 
-TODO
+The calibration for the HX710 is a two point calibration.
+The reason for a two point calibration is that in contrast to the HX711 
+for load cells, there is no "natural zero" per se.
+
+One need to do two measurements M1(raw1, out1) and M2(raw2, out2).
+These exists of two raw **read()** values for two calibrated **unit values**.
+
+With these two measurements the linear relation is derived 
+
+```
+units = (raw_in - offset) * scale;
+```
+
+After calibration one can get the parameters from the formula,
+to be stored e.g. in EEPROM for a next time e.g. after reboot.
+
+
+- **void calibrateUnit(int32_t raw1, float out1, int32_t raw2, float out2)**
+calculates the scale and offset from the two measurements.
+- **int32_t getOffset()** returns offset from formula to store for next time.
+- **float getScale()** returns scale from formula to store for next time.
+- **void setOffset(uint32_t offset)** set offset in the formula (e.g. from EEPROM)
+- **void setScale(float scale)** set scale in the formula (e.g. from EEPROM)
+
+In code something like
+
+```cpp
+//  save calibration data
+HXB.calibrateUnit(125465, 1019.2,  159864, 1025.6);
+EEPROM.set(offset_address, HXB.getOffset());
+EEPROM.set(scale_address, HXB.getScale());
+
+
+//  load calibration data
+HXB.setOffset(EEPROM.get(offset_address));
+HXB.setScale(EEPROM.get(scale_address));
+```
 
 
 ### Power
@@ -120,7 +162,9 @@ TODO
 - **void powerDown()** puts the device in sleep mode (after 60 us).
 - **void powerUp()** wakes up device.
 
-Note the **read()** function automatically wakes up the device.
+Note the **read()** and **fetch()** functions automatically wake up the device.
+So powerUp() is seldom needed.
+
 
 ## Future
 
@@ -131,10 +175,6 @@ Note the **read()** function automatically wakes up the device.
 #### Should
 
 - test extensively
-- implement calibration (HOW).
-  - zero point based (like HX711)
-  - two point based P1, P2  ```y = y1 + (x-x1)*(y2-y1)/(x2-x1)```
-  - converting to units / temperature  (See HX711)
 
 #### Could
 
@@ -146,8 +186,7 @@ Note the **read()** function automatically wakes up the device.
 
 #### Wont
 
-- bool isPowerUp();  //  needed?
-- void powerUp() not needed, as read does this.
+- bool isPowerUp();
 
 ## Support
 

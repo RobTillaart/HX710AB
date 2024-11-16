@@ -33,7 +33,6 @@ public:
     _scale = 1;
   };
 
-
   void begin(bool fastProcessor = false)
   {
     pinMode(_dataPin, INPUT);
@@ -62,6 +61,7 @@ public:
   //  actual worker.
   virtual int32_t fetch(bool differential = true)
   {
+    //  virtual function must have some implementation in base class.
     return differential ? 1 : 0;
   }
 
@@ -79,33 +79,29 @@ public:
 
   ////////////////////////////////////////////////////
   //
-  //  CALIBRATION READ
+  //  CALIBRATED READ
   //
   float readUnit(uint8_t n)
   {
     float x = 0;
     for (int i = 0; i < n; i++)
     {
-      x += (fetch() - _offset);
+      x += fetch();
     }
-    return (x * _scale) / n;
+    x /= n;
+    return (x + _offset) * _scale;
   };
 
 
   ////////////////////////////////////////////////////
   //
-  //  CALIBRATION
+  //  TWO POINT CALIBRATION
   //
-  void measureOffset(uint8_t n = 16)
+  void calibrateUnit(int32_t x1, float y1, int32_t x2, float y2)
   {
-    if (n == 0) n = 1;
-    _offset = 0;
-    for (int i = 0; i < n; i++)
-    {
-      _offset += read();
-    }
-    _offset /= n;
-  };
+    _scale = (y2 - y1) / (x2 - x1);
+    _offset = (y1 / _scale) - x1;
+  }
 
   void setOffset(uint32_t offset)
   {
@@ -115,18 +111,6 @@ public:
   int32_t getOffset()
   {
     return _offset;
-  };
-
-
-  void measureScale(float value)
-  {
-    float x = 0;
-    for (int i = 0; i < 16; i++)
-    {
-      x += read();
-    }
-    x /= 16;
-    _scale = value / x;
   };
 
   void setScale(float scale)
@@ -148,7 +132,6 @@ public:
   {
     digitalWrite(_clockPin, HIGH);
   };
-
 
   void powerUp()
   {
@@ -214,6 +197,7 @@ public:
     return _value;
   }
 
+  //  TODO getTemperature()
 };
 
 
@@ -256,6 +240,7 @@ public:
     return _value;
   };
 
+  //  TODO getVOltage()
 };
 
 

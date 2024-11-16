@@ -13,6 +13,8 @@ uint8_t clockPin = 7;
 
 HX710B HX(dataPin, clockPin);
 
+float __beta;
+float __alpha;
 
 void setup()
 {
@@ -25,9 +27,12 @@ void setup()
 
   HX.begin();
 
-  HX.measureOffset();
+  //  adjust two points to your pressure sensor.
+  //  calibrateUnit(x1 y1, x2, y2);
+  HX.calibrateUnit( 0, 0, 1000, 10);
   //  start async
   HX.request();
+
 }
 
 

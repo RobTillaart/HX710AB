@@ -10,10 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - implement base class HX710AB (reduce source duplication)
 - implement async interface, three functions
   - **void request()**, **bool isReady()**, **fetch()**
-- add plotter example
+- implement two point calibration **void calibrateUnit()**
+- add unit tests
+- add examples
 - update keywords.txt
 - update readme.md
-
 
 ## [0.1.1] - 2024-11-13
 - fix #2, add fastProcessor flag.

@@ -49,6 +49,42 @@ unittest(test_constructor)
 }
 
 
+unittest(test_calibrate)
+{
+  HX710B hx(8, 9);
+
+  hx.calibrateUnit(50, 50, 80, 100);
+  fprintf(stderr, "offset %f\n", hx.getOffset());
+  fprintf(stderr, "scale %f\n", hx.getScale());
+  assertEqualFloat(0, hx.getOffset(), 0.01);
+  assertEqualFloat(0, hx.getScale(), 0.01);
+}
+
+
+unittest(test_offset)
+{
+  HX710B hx(8, 9);
+
+  for (int i = -1000; i < 1000; i += 29)
+  {
+    hx.setOffset(i);
+    assertEqualFloat(float(i), hx.getOffset(), 0.01);
+  }
+}
+
+
+unittest(test_scale)
+{
+  HX710B hx(8, 9);
+
+  for (int i = -1000; i < 1000; i += 29)
+  {
+    hx.setScale(i);
+    assertEqualFloat(float(i), hx.getScale(), 0.01);
+  }
+}
+
+
 unittest_main()
 
 
