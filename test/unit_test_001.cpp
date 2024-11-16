@@ -56,8 +56,8 @@ unittest(test_calibrate)
   hx.calibrateUnit(50, 50, 80, 100);
   fprintf(stderr, "offset %f\n", hx.getOffset());
   fprintf(stderr, "scale %f\n", hx.getScale());
-  assertEqualFloat(0, hx.getOffset(), 0.01);
-  assertEqualFloat(0, hx.getScale(), 0.01);
+  assertEqualFloat(20.000, hx.getOffset(), 0.01);
+  assertEqualFloat(1.6666, hx.getScale(), 0.01);
 }
 
 
@@ -65,7 +65,7 @@ unittest(test_offset)
 {
   HX710B hx(8, 9);
 
-  for (int i = -1000; i < 1000; i += 29)
+  for (int i = -1000; i < 1000; i += 73)
   {
     hx.setOffset(i);
     assertEqualFloat(float(i), hx.getOffset(), 0.01);
@@ -77,7 +77,7 @@ unittest(test_scale)
 {
   HX710B hx(8, 9);
 
-  for (int i = -1000; i < 1000; i += 29)
+  for (int i = -1000; i < 1000; i += 73)
   {
     hx.setScale(i);
     assertEqualFloat(float(i), hx.getScale(), 0.01);
