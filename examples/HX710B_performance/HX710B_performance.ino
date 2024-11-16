@@ -24,6 +24,9 @@ void setup()
   Serial.print("HX710AB_LIB_VERSION: ");
   Serial.println(HX710AB_LIB_VERSION);
   Serial.println();
+  Serial.println("test takes about 50 seconds.");
+  Serial.println("times in micros, average 1000x read");
+  Serial.println();
 
   HX.begin(false);  //  fastprocessor flag
   delay(100);

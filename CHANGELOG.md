@@ -6,7 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.1.0] - 2024-11-13
+## [0.1.2] - 2024-11-13xxxxxxxxx
+- implement base class HX710AB (reduce source duplication)
+- implement async interface, three functions
+  - **void request()**, **bool isReady()**, **fetch()**
+- add plotter example
+- update keywords.txt
+- update readme.md
+
+
+## [0.1.1] - 2024-11-13
 - fix #2, add fastProcessor flag.
 - changed **lastRead()** into **lastValueRead()**
 - added **lastTimeRead()**
@@ -15,5 +24,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.0] - 2024-11-08
 - initial version
-
 

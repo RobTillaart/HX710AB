@@ -8,9 +8,23 @@ HX710B	KEYWORD1
 # Methods and Functions (KEYWORD2)
 begin	KEYWORD2
 
+request	KEYWORD2
+isReady	KEYWORD2
+fetch	KEYWORD2
+
 read	KEYWORD2
 lastTimeRead	KEYWORD2
 lastValueRead	KEYWORD2
+
+readUnit	KEYWORD2
+
+measureOffset	KEYWORD2
+setOffset	KEYWORD2
+getOffset	KEYWORD2
+
+measureScale	KEYWORD2
+setScale	KEYWORD2
+getScale	KEYWORD2
 
 powerDown	KEYWORD2
 powerUp	KEYWORD2
