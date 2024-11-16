@@ -18,7 +18,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 //  HX710AB BASE CLASS
-//  should not be used.
 //
 class HX710AB
 {
@@ -61,7 +60,10 @@ public:
   };
 
   //  actual worker.
-  virtual int32_t fetch(bool differential = true);
+  virtual int32_t fetch(bool differential = true)
+  {
+    return differential ? 1 : 0;
+  }
 
   int32_t read(bool differential = true)
   {

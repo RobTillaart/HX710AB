@@ -39,12 +39,6 @@ unittest_teardown()
 }
 
 
-unittest(test_0)
-{
-  assertEqual(1,1);
-}
-
-
 unittest(test_constructor)
 {
   HX710AB hx(4, 5);
