@@ -103,12 +103,12 @@ public:
     _offset = (y1 / _scale) - x1;
   }
 
-  void setOffset(uint32_t offset)
+  void setOffset(float offset)
   {
     _offset = offset;
   };
 
-  int32_t getOffset()
+  float getOffset()
   {
     return _offset;
   };
@@ -153,7 +153,7 @@ protected:
   uint32_t _lastTimeRead;
   int32_t  _value;
   bool     _fastProcessor;
-  int32_t  _offset;
+  float    _offset;
   float    _scale;
 };
 
