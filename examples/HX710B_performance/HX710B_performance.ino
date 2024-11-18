@@ -79,7 +79,7 @@ void setup()
   start = micros();
   for (int i = 0; i < 100; i++)
   {
-    b = HX.isReady();
+    b = HX.is_ready();
   }
   stop = micros();
   Serial.print("ISREADY: \t");
@@ -112,13 +112,13 @@ void setup()
   start = micros();
   for (int i = 0; i < 100; i++)
   {
-    HX.calibrateUnit(50, 50, 100, 80);
+    HX.calibrate(50, 50, 100, 80);
   }
   stop = micros();
   Serial.print("CALIBRATE: \t");
   Serial.println((stop - start) * 0.01);
-  Serial.println(HX.getOffset());
-  Serial.println(HX.getScale());
+  Serial.println(HX.get_offset());
+  Serial.println(HX.get_scale());
   delay(100);
 
   Serial.println("\ndone...");

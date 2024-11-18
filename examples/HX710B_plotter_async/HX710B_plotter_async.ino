@@ -28,8 +28,8 @@ void setup()
   HX.begin();
 
   //  adjust two points to your pressure sensor.
-  //  calibrateUnit(x1 y1, x2, y2);
-  HX.calibrateUnit( 0, 0, 1000, 10);
+  //  calibrate(x1 y1, x2, y2);
+  HX.calibrate( 0, 0, 1000, 10);
   //  start async
   HX.request();
 
@@ -38,9 +38,9 @@ void setup()
 
 void loop()
 {
-  if (HX.isReady())
+  if (HX.is_ready())
   {
-    Serial.println(HX.readUnit(1), 1);
+    Serial.println(HX.read(1), 1);
   }
   //  do other tasks
 }

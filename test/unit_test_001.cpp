@@ -53,11 +53,11 @@ unittest(test_calibrate)
 {
   HX710B hx(8, 9);
 
-  hx.calibrateUnit(50, 50, 80, 100);
-  fprintf(stderr, "offset %f\n", hx.getOffset());
-  fprintf(stderr, "scale %f\n", hx.getScale());
-  assertEqualFloat(-20.000, hx.getOffset(), 0.01);
-  assertEqualFloat(1.6666, hx.getScale(), 0.01);
+  hx.calibrate(50, 50, 80, 100);
+  fprintf(stderr, "offset %f\n", hx.get_offset());
+  fprintf(stderr, "scale %f\n", hx.get_scale());
+  assertEqualFloat(-20.000, hx.get_offset(), 0.01);
+  assertEqualFloat(1.6666, hx.get_scale(), 0.01);
 }
 
 
@@ -67,8 +67,8 @@ unittest(test_offset)
 
   for (int i = -1000; i < 1000; i += 173)
   {
-    hx.setOffset(i);
-    assertEqualFloat(float(i), hx.getOffset(), 0.01);
+    hx.set_offset(i);
+    assertEqualFloat(float(i), hx.get_offset(), 0.01);
   }
 }
 
@@ -79,8 +79,8 @@ unittest(test_scale)
 
   for (int i = -1000; i < 1000; i += 173)
   {
-    hx.setScale(i);
-    assertEqualFloat(float(i), hx.getScale(), 0.01);
+    hx.set_scale(i);
+    assertEqualFloat(float(i), hx.get_scale(), 0.01);
   }
 }
 

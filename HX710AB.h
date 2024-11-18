@@ -2,7 +2,7 @@
 //
 //    FILE: HX710AB.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.2
+// VERSION: 0.2.0
 // PURPOSE: Arduino library for the HX710A and HX710B 24-Bit ADC.
 //    DATE: 2024-11-08
 //     URL: https://github.com/RobTillaart/HX710AB
@@ -12,7 +12,7 @@
 
 #include "Arduino.h"
 
-#define HX710AB_LIB_VERSION              (F("0.1.2"))
+#define HX710AB_LIB_VERSION              (F("0.2.0"))
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ public:
     digitalWrite(_clockPin, LOW);
   };
 
-  bool isReady()
+  bool is_ready()
   {
     //  ready == data goes LOW
     return (digitalRead(_dataPin) == LOW);
@@ -68,20 +68,25 @@ public:
   int32_t read(bool differential = true)
   {
     request();
-    while (! isReady()) yield();
+    while (! is_ready()) yield();
     return fetch(differential);
   };
 
-  uint32_t lastTimeRead()
+  uint32_t last_time_read()
   {
     return _lastTimeRead;
+  };
+
+  uint32_t last_value_read()
+  {
+    return _value;
   };
 
   ////////////////////////////////////////////////////
   //
   //  CALIBRATED READ
   //
-  float readUnit(uint8_t n)
+  float get_units(uint8_t n)
   {
     float x = 0;
     for (int i = 0; i < n; i++)
@@ -89,7 +94,7 @@ public:
       x += fetch();
     }
     x /= n;
-    return (x + _offset) * _scale;
+    return (x - _offset) * _scale;
   };
 
 
@@ -97,30 +102,36 @@ public:
   //
   //  TWO POINT CALIBRATION
   //
-  void calibrateUnit(int32_t x1, float y1, int32_t x2, float y2)
+  //  keep offset scale "compatible" with HX711 library.
+  //  
+  bool calibrate(int32_t x1, float y1, int32_t x2, float y2)
   {
+    if ((x1 == x2) || (y2 == y1)) return false;
     _scale = (y2 - y1) / (x2 - x1);
-    _offset = (y1 / _scale) - x1;
+    _offset = x1 - (y1 / _scale);
+    return true;
   }
 
-  void setOffset(float offset)
+  void set_offset(float offset)
   {
     _offset = offset;
   };
 
-  float getOffset()
+  float get_offset()
   {
     return _offset;
   };
 
-  void setScale(float scale)
+  bool set_scale(float scale)
   {
-    _scale = scale;
+    if (scale == 0) return false;
+    _scale = 1.0 / scale;
+    return true;
   };
 
-  float getScale()
+  float get_scale()
   {
-    return _scale;
+    return 1.0 / _scale;
   };
 
 
@@ -128,19 +139,19 @@ public:
   //
   //  POWER
   //
-  void powerDown()
+  void power_down()
   {
     digitalWrite(_clockPin, HIGH);
   };
 
-  void powerUp()
+  void power_up()
   {
     digitalWrite(_clockPin, LOW);
   };
 
 
 protected:
-  void clockPulse()
+  void clock_pulse()
   {
     digitalWrite(_clockPin, HIGH);
     if (_fastProcessor) delayMicroseconds(1);
@@ -176,7 +187,7 @@ public:
     _value = 0;
     for (int i = 0; i < 24; i++)
     {
-      clockPulse();
+      clock_pulse();
       _value <<= 1;
       if (digitalRead(_dataPin)) _value++;
     }
@@ -184,11 +195,11 @@ public:
     //  pulses for next read
     //  25 = Differential Input, 10 Hz
     //  26 = Temperature, 40 Hz
-    clockPulse();  //  25
+    clock_pulse();  //  25
     if (differential == false)
     {
       //  Temperature out, 40 Hz
-      clockPulse();  //  26
+      clock_pulse();  //  26
     }
 
     _lastTimeRead = millis();
@@ -219,7 +230,7 @@ public:
     _value = 0;
     for (int i = 0; i < 24; i++)
     {
-      clockPulse();
+      clock_pulse();
       _value <<= 1;
       if (digitalRead(_dataPin)) _value++;
     }
@@ -227,11 +238,11 @@ public:
     //  pulses for next read
     //  26 = DVDD-AVDD (HX710B), 40 Hz
     //  27 = Differential Input, 40 Hz
-    clockPulse();  //  25
-    clockPulse();  //  26
+    clock_pulse();  //  25
+    clock_pulse();  //  26
     if (differential)
     {
-      clockPulse();  //  27
+      clock_pulse();  //  27
     }
 
     _lastTimeRead = millis();

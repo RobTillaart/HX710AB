@@ -26,13 +26,13 @@ void setup()
   HX.begin();
 
   //  adjust to your raw measurements.
-  HX.calibrateUnit(50, 0, 100, 80);
+  HX.calibrate(50, 0, 100, 80);
 }
 
 
 void loop()
 {
-  Serial.println(HX.readUnit(1), 1);
+  Serial.println(HX.read(1), 1);
 }
 
 

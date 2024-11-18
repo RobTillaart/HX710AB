@@ -37,6 +37,12 @@ especially zero's might be an indication that something is wrong.
 The HX710 is closely related to the HX711 which has more features.
 These are not 1-to-1 replaceable devices.
 
+### Breaking changes 0.2.0
+
+Some functions have been renamed to bring the API in line with the HX711 library.
+
+Pre-0.2.0 (experimental) versions are therefore obsolete.
+
 
 ### Performance
 
@@ -91,8 +97,8 @@ If data does not makes sense, not stable one can try this flag.
 reads from the device, sets the mode for the **next** read.
 The default parameter is true as differential readings are most used.
 See table below.
-- **uint32_t lastTimeRead()** returns last time a value was read in milliseconds.
-- **int32_t lastValueRead()** returns last read value, note this can be
+- **uint32_t last_time_read()** returns last time a value was read in milliseconds.
+- **int32_t last_value_read()** returns last read value, note this can be
 differential or other. The user should keep track of this.
 
 |  differential  |  HX710A         |  HX710B         |  notes    |
@@ -109,7 +115,7 @@ This allows the user to do other tasks instead of active waiting.
 In fact the **read()** is implemented with this async interface.
 
 - **void request()** wakes up the device to make a measurement.
-- **bool isReady()** checks if a measurement is ready.
+- **bool is_ready()** checks if a measurement is ready.
 - **int32_t fetch(bool differential = true)** 
 reads from the device, sets the mode for the **next** read.
 The default parameter is true as differential readings are most used.
@@ -123,7 +129,8 @@ The reason for a two point calibration is that in contrast to the HX711
 for load cells, there is no "natural zero" per se.
 
 One need to do two measurements M1(raw1, out1) and M2(raw2, out2).
-These exists of two raw **read()** values for two calibrated **unit values**.
+These exists of two raw **read()** values for two known / calibrated 
+**unit values**.
 
 With these two measurements the linear relation is derived 
 
@@ -135,14 +142,17 @@ After calibration one can get the parameters from the formula,
 to be stored e.g. in EEPROM for a next time e.g. after reboot.
 
 
-- **void calibrateUnit(int32_t raw1, float out1, int32_t raw2, float out2)**
+- **bool calibrate(int32_t raw1, float out1, int32_t raw2, float out2)**
 calculates the scale and offset from the two measurements.
-- **int32_t getOffset()** returns offset from formula to store for next time.
-- **float getScale()** returns scale from formula to store for next time.
-- **void setOffset(uint32_t offset)** set offset in the formula (e.g. from EEPROM)
-- **void setScale(float scale)** set scale in the formula (e.g. from EEPROM)
+returns false if (raw1 == raw2) or (out1 == out2) as then scale and/or
+offset can not be calculated.
+- **int32_t get_offset()** returns offset from the formula to store for next time.
+- **float get_scale()** returns scale from the formula to store for next time.
+- **void set_offset(uint32_t offset)** set offset in the formula (e.g. from EEPROM)
+- **bool set_scale(float scale)** set scale in the formula (e.g. from EEPROM)
+Returns false if scale is set to zero as this would make all measurements zero.
 
-In code something like
+In code this could look like
 
 ```cpp
 //  save calibration data
@@ -156,11 +166,20 @@ HXB.setOffset(EEPROM.get(offset_address));
 HXB.setScale(EEPROM.get(scale_address));
 ```
 
+The values from offset and scale should be compatible with the HX711 library.
+However this is not tested (yet).
+
+
+### Units
+
+- **float get_units()** read the device in calibrated units.
+Works only after calibration, see above.
+
 
 ### Power
 
-- **void powerDown()** puts the device in sleep mode (after 60 us).
-- **void powerUp()** wakes up device.
+- **void power_down()** puts the device in sleep mode (after 60 us).
+- **void power_up()** wakes up device.
 
 Note the **read()** and **fetch()** functions automatically wake up the device.
 So powerUp() is seldom needed.
