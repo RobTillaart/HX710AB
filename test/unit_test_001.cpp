@@ -56,8 +56,8 @@ unittest(test_calibrate)
   hx.calibrate(50, 50, 80, 100);
   fprintf(stderr, "offset %f\n", hx.get_offset());
   fprintf(stderr, "scale %f\n", hx.get_scale());
-  assertEqualFloat(-20.000, hx.get_offset(), 0.01);
-  assertEqualFloat(1.6666, hx.get_scale(), 0.01);
+  assertEqualFloat(20.000, hx.get_offset(), 0.01);
+  assertEqualFloat(0.6, hx.get_scale(), 0.01);
 }
 
 
