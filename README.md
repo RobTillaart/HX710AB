@@ -62,6 +62,7 @@ interface to keep performance at maximum level.
 - https://github.com/RobTillaart/HX710AB  this library.
 - https://github.com/RobTillaart/HX711  for load cells.
 - https://github.com/RobTillaart/HX711_MP  for load cells with multipoint calibration.
+- https://github.com/RobTillaart/HX712  for load cells.
 - https://swharden.com/blog/2022-11-14-hx710b-arduino/  usage with pressure sensor.
 - https://http://www.aviaic.com/  (manufacturer)
 - https://github.com/RobTillaart/weight  conversions
@@ -159,14 +160,14 @@ In code this could look like
 
 ```cpp
 //  save calibration data
-HXB.calibrateUnit(125465, 1019.2,  159864, 1025.6);
-EEPROM.set(offset_address, HXB.getOffset());
-EEPROM.set(scale_address, HXB.getScale());
+HXB.calibrate(125465, 1019.2,  159864, 1025.6);
+EEPROM.set(offset_address, HXB.get_offset());
+EEPROM.set(scale_address, HXB.get_scale());
 
 
 //  load calibration data
-HXB.setOffset(EEPROM.get(offset_address));
-HXB.setScale(EEPROM.get(scale_address));
+HXB.set_offset(EEPROM.get(offset_address));
+HXB.set_scale(EEPROM.get(scale_address));
 ```
 
 The values from offset and scale should be compatible with the HX711 library.
@@ -175,8 +176,11 @@ However this is not tested (yet).
 
 ### Units
 
-- **float get_units()** read the device in calibrated units.
+- **float get_units(uint8_t n)** read the device in calibrated units.
 Works only after calibration, see above.
+
+If the device is not calibrated, the offset = 0.0 and the scale = 1.0.
+This means **get_units()** will return the raw measurement as a float.
 
 
 ### Power
@@ -197,7 +201,8 @@ So powerUp() is seldom needed.
 #### Should
 
 - test extensively
-- fix TODO's in code
+- add get_temperature() in HX710A
+- add get_voltage() in HX710B
 
 #### Could
 
