@@ -136,7 +136,7 @@ One need to do two measurements M1(raw1, out1) and M2(raw2, out2).
 These exists of two raw **read()** values for two known / calibrated 
 **unit values**.
 
-With these two measurements the linear relation is derived 
+With these two measurements the following linear relation is derived 
 
 ```
 units = (raw_in - offset) * scale;
@@ -179,8 +179,9 @@ However this is not tested (yet).
 - **float get_units(uint8_t n)** read the device in calibrated units.
 Works only after calibration, see above.
 
-If the device is not calibrated, the offset = 0.0 and the scale = 1.0.
-This means **get_units()** will return the raw measurement as a float.
+If the device is not calibrated, the offset == 0.0 and the scale == 1.0.
+This implies that a **get_units()** call will return the raw measurement as a float.
+Of course one can set these to these default values on purpose.
 
 
 ### Power
@@ -206,15 +207,16 @@ So powerUp() is seldom needed.
 
 #### Could
 
-- extend unit tests(?)
-- add more examples.
-- extend performance test sketch
+- extend unit tests
+- add examples.
+- extend performance sketch
 
 #### Wont
 
 - bool isPowerUp();
 - AVR optimized code - see FastShiftIn.
   (low gain as sensor blocks at 10/40 Hz)
+
 
 ## Support
 
