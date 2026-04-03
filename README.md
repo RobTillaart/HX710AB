@@ -176,8 +176,9 @@ However this is not tested (yet).
 
 ### Units
 
-- **float get_units(uint8_t n)** read the device in calibrated units.
+- **float get_units(uint8_t n = 1)** read the device in calibrated units.
 Works only after calibration, see above.
+The function can average n measurements (n = 1..255)
 
 If the device is not calibrated, the offset == 0.0 and the scale == 1.0.
 This implies that a **get_units()** call will return the raw measurement as a float.
