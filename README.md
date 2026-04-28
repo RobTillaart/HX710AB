@@ -69,6 +69,11 @@ interface to keep performance at maximum level.
 - https://github.com/RobTillaart/pressure  conversions
 
 
+HX710B library for the MPS20N0040D pressure sensor.
+
+- https://github.com/rppelayo/hx710B_pressure_sensor
+
+
 ### Test
 
 Tested HX710B with Arduino UNO.
@@ -124,6 +129,17 @@ In fact the **read()** is implemented with this async interface.
 reads from the device, sets the mode for the **next** read.
 The default parameter is true as differential readings are most used.
 See table above.
+
+
+### Timeout
+
+To prevent blocking if a sensor is broken or due to a bad connection
+the library has a timeout function.
+If the timeout value is set to 0 (zero) the timeout will not be checked.
+The default value is 1000 milliseconds.
+
+- **void set_timeout(uint32_t timeout)**
+- **uint32_t get_timeout()** return set value.
 
 
 ### Calibration
