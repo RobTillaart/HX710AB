@@ -40,6 +40,28 @@ These are not 1-to-1 replaceable devices.
 If problems occur or there are questions, please open an issue at GitHub.
 
 
+### Multiple devices
+
+The library allows to have multiple devices on different pins.
+When having an array of sensors the number of pins used adds up.
+
+One way of reducing pins is to add a multiplexer e.g. HC4052,
+which can select up to 4 devices allowing only 4 pins, or a 
+MAX14661 which allows up to 16 devices.
+
+- https://github.com/RobTillaart/HC4052 2 pins, 2x4 multiplexer.
+- https://github.com/RobTillaart/MAX14661 I2C, 2x16 multiplexer.
+
+Another way is to share the CLOCK pin for all devices and have an unique
+DATA pin per device. This allows one to control N devices with N+1 pin.
+
+In theory one could control (read) multiple devices in parallel,
+however this library does not support such feature.
+Seen a setup once having a shared CLOCK, and a 8 bit IO chip to read
+up to 8 channels in parallel. There was some "bit magic" to split the
+bits from the IO chips into the parallel DATA bytes.
+
+
 ### Breaking changes 0.2.0
 
 Some functions have been renamed to bring the API in line with the HX711 library.
