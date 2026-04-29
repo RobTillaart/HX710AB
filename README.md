@@ -123,6 +123,12 @@ As the device might be blocking for up to 100 millis when using the synchronous
 This allows the user to do other tasks instead of active waiting.
 In fact the **read()** is implemented with this async interface.
 
+In fact the **read()** call might be blocking for an undetermined amount of time.
+If the data line is not pulled LOW due to a broken device or bad connection the
+**is_ready()** will never return true, causing an endless loop.
+The asynchronous API gives the user a way to detect this situation and to act
+in a project specific way to handle the problem.
+
 - **void request()** wakes up the device to make a measurement.
 - **bool is_ready()** checks if a measurement is ready.
 - **int32_t fetch(bool differential = true)** 
@@ -133,10 +139,14 @@ See table above.
 
 ### Timeout
 
-To prevent blocking if a sensor is broken or due to a bad connection
-the library has a timeout function.
+To prevent a blocking **read()** if a sensor is broken or due to a bad connection
+the library has a timeout function (since 0.3.1).
 If the timeout value is set to 0 (zero) the timeout will not be checked.
 The default value is 1000 milliseconds.
+
+Note that the sensor might need up to 100 millis to get ready, so setting the 
+timeout to a too small value might result in not reading the sensor at all.
+(getting series of zero's, optionally alternating, to investigate)
 
 - **void set_timeout(uint32_t timeout)**
 - **uint32_t get_timeout()** return set value.
