@@ -95,6 +95,10 @@ HX710B library for the MPS20N0040D pressure sensor.
 
 - https://github.com/rppelayo/hx710B_pressure_sensor
 
+About calibration
+
+- https://makersportal.com/blog/2020/6/4/mps20n0040d-pressure-sensor-calibration-with-arduino
+
 
 ### Test
 
